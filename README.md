@@ -41,5 +41,5 @@ ros2 launch lbr_bringup hardware.launch.py ctrl:=gravity_compensation
 ---
 
 #### References
-- [Cartesian controllers](git@github.com:fzi-forschungszentrum-informatik/cartesian_controllers.git)
+- [Cartesian controllers](https://github.com/fzi-forschungszentrum-informatik/cartesian_controllers.git)
 - [lbr ROS2 stack](https://github.com/lbr-stack/lbr_fri_ros2_stack)
