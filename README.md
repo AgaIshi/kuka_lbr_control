@@ -36,7 +36,7 @@ ros2 launch lbr_bringup hardware.launch.py ctrl:=gravity_compensation
 #### Cartesian impedance control
 ```
 source install/setup.bash
-ros2 launch lbr_bringup hardware.launch.py ctrl:=gravity_compensation
+ros2 launch lbr_bringup hardware.launch.py ctrl:=cartesian_impedance_controller
 ```
 ---
 
