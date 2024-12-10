@@ -1,4 +1,4 @@
-# kuka_impedance control
+# KUKA LBR Cartesian Impedance Control
 A repository for controlling the KUKA lbr or med with cartesian impedance control.
 
 
