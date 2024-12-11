@@ -15,14 +15,13 @@ jobs:
       - uses: ros-tooling/setup-ros@v0.7
         with:
           required-ros-distributions: humble
-      - run: sudo apt-get install -y ros-humble-pcl-*
       - run: |
           # Create the workspace and move the repository to src
           mkdir -p ~/ros2_ws/src
           mv $(ls -d * | grep -v ros2_ws) ~/ros2_ws/src
           cd ~/ros2_ws
           # Install and initialize rosdep
-          sudo apt-get update
+          # sudo apt-get update
           # sudo apt-get install -y python3-rosdep
           sudo rosdep init
           rosdep update
