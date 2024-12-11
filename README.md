@@ -1,4 +1,6 @@
-# KUKA LBR Cartesian Impedance Control
+# KUKA LBR Cartesian Impedance Control  
+[![Humble CI](https://github.com/idra-lab/kuka_impedance/actions/workflows/main.yml/badge.svg)](https://github.com/idra-lab/kuka_impedance/actions/workflows/main.yml)  
+
 A repository for controlling the KUKA lbr or med with cartesian impedance control.
 
 
