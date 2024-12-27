@@ -75,7 +75,7 @@ nullspace_stiffness: 10.0
 ...
 ```
 in `lbr_fri_ros2_stack/lbr_description/ros2_control/lbr_controllers.yaml` under the `cartesian_impedance_controller` configuration.  
-Then run the controller
+Then run the controller:
 ```
 source install/setup.bash
 ros2 launch lbr_bringup hardware.launch.py ctrl:=cartesian_impedance_controller model:=iiwa14 # or iiwa7, med7, med14
@@ -94,8 +94,9 @@ kuka_hw: false
 ...
 ```
 in `lbr_fri_ros2_stack/lbr_description/ros2_control/lbr_controllers.yaml` under the `cartesian_impedance_controller` configuration.  
-Then run the gazebo simulation
+Then run the gazebo simulation:
 ```
+source install/setup.bash
 ros2 launch lbr_bringup gazebo.launch.py ctrl:=cartesian_impedance_controller model:=iiwa14
 ```
 <div align="center">
@@ -112,14 +113,11 @@ cd controller_evaluation/
 ```
 Make sure that the robot type is set to `"kuka"` in the `initialize.py` file. 
 Adjust the trajectory parameters in the `traj_sin.py` or `traj_lin.py` file. 
-Then run the trajectory publisher
+Then run the trajectory publisher:
 ```
 source /opt/ros/humble/setup.bash
 python3 traj_sin.py # traj_lin.py
 ```
-<div align="center">
-<img src='https://github.com/idra-lab/kuka_impedance/blob/main/assets/gazebo.gif' width="640"/>
-</div>
 
 ## References
 - [Cartesian controllers](https://github.com/fzi-forschungszentrum-informatik/cartesian_controllers.git)
