@@ -60,7 +60,9 @@ ros2 launch lbr_bringup hardware.launch.py ctrl:=gravity_compensation
 source install/setup.bash
 ros2 launch lbr_bringup hardware.launch.py ctrl:=cartesian_impedance_controller
 ```
-
+<div align="center">
+<img src='https://github.com/idra-lab/kuka_impedance/blob/main/assets/cart_impedance.gif' width="640"/>
+</div>
 ---
 
 
@@ -77,7 +79,10 @@ Then run the controller
 ```
 source install/setup.bash
 ros2 launch lbr_bringup hardware.launch.py ctrl:=cartesian_impedance_controller
-``` 
+```
+<div align="center">
+<img src='https://github.com/idra-lab/kuka_impedance/blob/main/assets/null_space_impedance.gif' width="640"/>
+</div>
 
 ## References
 - [Cartesian controllers](https://github.com/fzi-forschungszentrum-informatik/cartesian_controllers.git)
