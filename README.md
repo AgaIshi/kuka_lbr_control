@@ -45,7 +45,7 @@ Build the workspace
 colcon build --symlink-install
 ```
 
-## Run the controllers
+## Run the controllers on real hardware
 
 ### Gravity compensation
 ```
@@ -58,13 +58,13 @@ ros2 launch lbr_bringup hardware.launch.py ctrl:=gravity_compensation
 ### Cartesian impedance control
 ```
 source install/setup.bash
-ros2 launch lbr_bringup hardware.launch.py ctrl:=cartesian_impedance_controller
+ros2 launch lbr_bringup hardware.launch.py ctrl:=cartesian_impedance_controller model:=iiwa14 # or iiwa7, med7, med14
 ```
 <div align="center">
 <img src='https://github.com/idra-lab/kuka_impedance/blob/main/assets/cart_impedance.gif' width="640"/>
 </div>
----
 
+---  
 
 ### Cartesian impedance control with nullspace task
 This controller takes the initial configuration as the reference position for the nullspace control.  
@@ -74,14 +74,51 @@ Can be activated by setting
 nullspace_stiffness: 10.0
 ...
 ```
-in `lbr_fri_ros2_stack/lbr_description/ros2_control/lbr_controllers.yaml` in the `cartesian_impedance_controller` configuration.  
+in `lbr_fri_ros2_stack/lbr_description/ros2_control/lbr_controllers.yaml` under the `cartesian_impedance_controller` configuration.  
 Then run the controller
 ```
 source install/setup.bash
-ros2 launch lbr_bringup hardware.launch.py ctrl:=cartesian_impedance_controller
-```
+ros2 launch lbr_bringup hardware.launch.py ctrl:=cartesian_impedance_controller model:=iiwa14 # or iiwa7, med7, med14
+```  
 <div align="center">
 <img src='https://github.com/idra-lab/kuka_impedance/blob/main/assets/null_space_impedance.gif' width="640"/>
+</div>
+
+---  
+
+## Test the controllers in Gazebo
+You need first to set
+```
+...
+kuka_hw: false
+...
+```
+in `lbr_fri_ros2_stack/lbr_description/ros2_control/lbr_controllers.yaml` under the `cartesian_impedance_controller` configuration.  
+Then run the gazebo simulation
+```
+ros2 launch lbr_bringup gazebo.launch.py ctrl:=cartesian_impedance_controller model:=iiwa14
+```
+<div align="center">
+<img src='https://github.com/idra-lab/kuka_impedance/blob/main/assets/gazebo.gif' width="640"/>
+</div>
+
+## Tracking a reference trajectory
+This controller takes a trajectory as input a `PoseStamped` message and tracks it.
+You need to publish a `PoseStamped` message on the `/lbr/target_frame` topic.  
+Some examples trajectories are already implemented [here](https://github.com/Hydran00/controller_evaluation) where tracking performances are also visualized.
+```
+git clone git@github.com:Hydran00/controller_evaluation.git
+cd controller_evaluation/
+```
+Make sure that the robot type is set to `"kuka"` in the `initialize.py` file. 
+Adjust the trajectory parameters in the `traj_sin.py` or `traj_lin.py` file. 
+Then run the trajectory publisher
+```
+source /opt/ros/humble/setup.bash
+python3 traj_sin.py # traj_lin.py
+```
+<div align="center">
+<img src='https://github.com/idra-lab/kuka_impedance/blob/main/assets/gazebo.gif' width="640"/>
 </div>
 
 ## References
