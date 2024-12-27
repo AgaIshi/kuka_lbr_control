@@ -1,0 +1,34 @@
+name: Humble CI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  humble_source:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - uses: ros-tooling/setup-ros@v0.7
+        with:
+          required-ros-distributions: humble
+      - run: |
+          # Create the workspace and move the repository to src
+          mkdir -p ~/ros2_ws/src
+          mv $(ls -d * | grep -v ros2_ws) ~/ros2_ws/src
+          cd ~/ros2_ws
+          # Install and initialize rosdep
+          # sudo apt-get update
+          # sudo apt-get install -y python3-rosdep
+          sudo rosdep init
+          rosdep update
+      - run: |
+          cd ~/ros2_ws
+          rosdep install --from-paths src -i -r -y
+      - uses: ros-tooling/action-ros-ci@v0.3
+        with:
+          package-name: kuka_package
+          target-ros2-distro: humble
