@@ -92,6 +92,8 @@ You need first to set
 ...
 kuka_hw: false
 ...
+compensate_gravity: true
+compensate_coriolis: true
 ```
 in `lbr_fri_ros2_stack/lbr_description/ros2_control/lbr_controllers.yaml` under the `cartesian_impedance_controller` configuration.  
 Then run the gazebo simulation:
