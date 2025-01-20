@@ -1,16 +1,15 @@
-[submodule "lbr_fri_ros2_stack"]
-	path = lbr_fri_ros2_stack
-	url = git@github.com:idra-lab/lbr_fri_ros2_stack.git
-	branch = humble
-[submodule "lbr_fri_idl"]
-	path = lbr_fri_idl
-	url = https://github.com/lbr-stack/lbr_fri_idl
-	branch = fri-1
 [submodule "effort_controller"]
 	path = effort_controller
 	url = git@github.com:lucabeber/effort_controller.git
 	branch = main
-[submodule "fri"]
-	path = fri
+[submodule "lbr-stack/fri"]
+	path = lbr-stack/fri
 	url = git@github.com:idra-lab/fri.git
 	branch = fri-1.17
+[submodule "lbr-stack/lib_fri_idl"]
+	path = lbr-stack/lib_fri_idl
+	url = https://github.com/lbr-stack/lbr_fri_idl
+[submodule "lbr-stack/lbr_fri_ros2_stack"]
+	path = lbr-stack/lbr_fri_ros2_stack
+	url = https://github.com/idra-lab/lbr_fri_ros2_stack
+	branch = humble
