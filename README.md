@@ -32,6 +32,9 @@ control_mode_ = new JointImpedanceControlMode(0, 0, 0, 0, 0, 0, 0);
 Then synchronize the application to update the changes.
   
 ### Install
+#### Discaimer
+The dynamic parameters (mass, inertias) of the URDF of the lbr_description package are **very inaccurate**, therefore you will experience very poor tracking performance with the controllers implemented in the `main` branch of `ros2_effort_controller`. A possible solution is to perform the dynamics identification of the robot, further details will be added in the future. If you don't need variable impedance controller or particular additional torque terms, I suggest you to use the [`kuka-prop-ctrl`](https://github.com/lucabeber/ros2_effort_controller/tree/kuka-prop-ctrl) branch of our controllers. It uses the proprietary impedance controller of Kuka (therefore the correct dynamics model) and you'll get very good tracking performances. We used the closed loop inverse kinematics (CLIK) algorithm to compute the inverse kinematics with also the postural task. You can checkout to that branch in the `effort_controller` folder before building to use the proprietary version (`git checkout kuka-prop-ctrl`).
+
 Clone this repo inside your ros2 workspace as the `src` folder
 ```
 git clone --recursive git@github.com:idra-lab/kuka_impedance.git src
@@ -46,7 +49,6 @@ colcon build --symlink-install
 ```
 
 ## Run the controllers on real hardware
-
 ### Gravity compensation
 ```
 source install/setup.bash
