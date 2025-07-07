@@ -22,19 +22,17 @@ A repository for controlling the KUKA lbr or med with cartesian impedance contro
     </tr>
 </table>
 
-### Install
+## Install
 The installation guide is available in the [Wiki page](https://github.com/idra-lab/kuka_lbr_control/wiki)
 
 ## Run the controllers on real hardware
 ### Kinematics control
 TODO
-### Gravity compensation
-```
-source install/setup.bash
-ros2 launch lbr_bringup hardware.launch.py ctrl:=gravity_compensation
-```
 
 ---
+
+### Gravity compensation
+TODO
 
 ### Cartesian impedance control
 <div align="center">
