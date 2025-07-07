@@ -1,4 +1,4 @@
-package controllers;
+package application;
 
 import static com.kuka.roboticsAPI.motionModel.BasicMotions.positionHold;
 
