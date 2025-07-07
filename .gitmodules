@@ -1,5 +1,5 @@
 [submodule "effort_controller"]
-	path = effort_controller
+	path = controller
 	url = git@github.com:lucabeber/effort_controller.git
 	branch = main
 [submodule "lbr-stack/fri"]
