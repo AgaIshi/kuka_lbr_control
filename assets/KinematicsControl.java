@@ -26,7 +26,7 @@ public class KinematicsControl extends RoboticsAPIApplication {
 	private Controller lbr_controller_;
 	
     @Inject
-    @Named("CameraProbeUS")
+    @Named("Tool")
     private Tool mytool;
 
 	// control mode
