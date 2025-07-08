@@ -1,4 +1,4 @@
-package application;
+package lbr_fri_ros2;
 
 import static com.kuka.roboticsAPI.motionModel.BasicMotions.positionHold;
 
