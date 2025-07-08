@@ -26,46 +26,34 @@ A repository for controlling the KUKA lbr or med with cartesian impedance contro
 The installation guide is available in the [Wiki page](https://github.com/idra-lab/kuka_lbr_control/wiki)
 
 ## Run the controllers on real hardware
-### Kinematics control
-TODO
+### Kinematics controls
+<div align="center">
+<img src='https://github.com/idra-lab/kuka_impedance/blob/main/assets/videos/kin.gif' width="640"/>
+</div>
 
 ---
 
-### Gravity compensation
-TODO
-
-### Cartesian impedance control
+### Gravity Compensation
 <div align="center">
-<img src='https://github.com/idra-lab/kuka_impedance/blob/main/assets/cart_impedance.gif' width="640"/>
+<img src='https://github.com/idra-lab/kuka_impedance/blob/main/assets/videos/grav.gif' width="640"/>
+</div>
+
+---
+
+### Cartesian Impedance Control with Null Space Task
+<div align="center">
+<img src='https://github.com/idra-lab/kuka_impedance/blob/main/assets/videos/imp.gif' width="640"/>
 </div>
 
 ---  
 
-### Cartesian impedance control with nullspace task
+## Gazebo Simulation
 <div align="center">
-<img src='https://github.com/idra-lab/kuka_impedance/blob/main/assets/null_space_impedance.gif' width="640"/>
+<img src='https://github.com/idra-lab/kuka_impedance/blob/main/assets/videos/gazebo.gif' width="640"/>
 </div>
+
+---
 ---  
-
-## Test the controllers in Gazebo
-<img src='https://github.com/idra-lab/kuka_impedance/blob/main/assets/gazebo.gif' width="640"/>
-</div>
-
-## Tracking a reference trajectory
-This controller takes a trajectory as input a `PoseStamped` message and tracks it.
-You need to publish a `PoseStamped` message on the `/lbr/target_frame` topic.  
-Some examples trajectories are already implemented [here](https://github.com/Hydran00/controller_evaluation) where tracking performances are also visualized.
-```
-git clone git@github.com:Hydran00/controller_evaluation.git
-cd controller_evaluation/
-```
-Make sure that the robot type is set to `"kuka"` in the `initialize.py` file. 
-Adjust the trajectory parameters in the `traj_sin.py` or `traj_lin.py` file. 
-Then run the trajectory publisher:
-```
-source /opt/ros/humble/setup.bash
-python3 traj_sin.py # traj_lin.py
-```
 
 ## References
 - [Cartesian controllers](https://github.com/fzi-forschungszentrum-informatik/cartesian_controllers.git)
