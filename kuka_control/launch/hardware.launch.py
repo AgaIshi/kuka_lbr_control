@@ -54,12 +54,15 @@ def launch_setup(context, *args, **kwargs):
     ctrl = LaunchConfiguration("ctrl").perform(context)
 
     # Dynamically set sys_cfg based on ctrl value
-    sys_cfg_default = (
-        "config/lbr_system_config_clik.yaml"
-        if ctrl == "kuka_clik_controller"
-        else "config/lbr_system_config_torque.yaml"
-    )
+    sys_cfg_default = "config/lbr_system_config_position.yaml"
+    if (
+        ctrl == "cartesian_impedance_controller"
+        or ctrl == "joint_impedance_controller"
+        or ctrl == "gravity_compensation"
+    ):
+        sys_cfg_default = "config/lbr_system_config_torque.yaml"
 
+    print(f"Uwsing system config: {sys_cfg_default}")
     # Declare sys_cfg argument now that we know the correct default
     sys_cfg_arg = DeclareLaunchArgument(
         "sys_cfg",
