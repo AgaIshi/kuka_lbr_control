@@ -28,10 +28,10 @@ def node_ros2_control(
             PathJoinSubstitution(
                 [
                     FindPackageShare(
-                        LaunchConfiguration("ctrl_cfg_pkg", default="lbr_description")
+                        LaunchConfiguration("ctrl_cfg_pkg", default="kuka_control")
                     ),
                     LaunchConfiguration(
-                        "ctrl_cfg", default="ros2_control/lbr_controllers.yaml"
+                        "ctrl_cfg", default="config/controllers.yaml"
                     ),
                 ]
             ),
@@ -62,7 +62,6 @@ def launch_setup(context, *args, **kwargs):
     ):
         sys_cfg_default = "config/lbr_system_config_torque.yaml"
 
-    print(f"Uwsing system config: {sys_cfg_default}")
     # Declare sys_cfg argument now that we know the correct default
     sys_cfg_arg = DeclareLaunchArgument(
         "sys_cfg",
@@ -101,23 +100,27 @@ def launch_setup(context, *args, **kwargs):
         LaunchConfiguration("ctrl")
     )
 
-    controller_event_handler = RegisterEventHandler(
-        OnProcessStart(
-            target_action=ros2_control_node,
-            on_start=[
-                joint_state_broadcaster,
-                force_torque_broadcaster,
-                lbr_state_broadcaster,
-                controller,
-            ],
-        )
-    )
+    # controller_event_handler = RegisterEventHandler(
+    #     OnProcessStart(
+    #         target_action=ros2_control_node,
+    #         on_start=[
+    #             joint_state_broadcaster,
+    #             force_torque_broadcaster,
+    #             lbr_state_broadcaster,
+    #             controller,
+    #         ],
+    #     )
+    # )
 
     return [
         sys_cfg_arg,
         robot_state_publisher,
         ros2_control_node,
-        controller_event_handler,
+        # controller_event_handler,
+        joint_state_broadcaster,
+        force_torque_broadcaster,
+        lbr_state_broadcaster,
+        controller,
     ]
 
 
@@ -149,6 +152,6 @@ def generate_launch_description() -> LaunchDescription:
     )
 
     # Opaque function to evaluate 'ctrl' and configure dependent args/nodes
-    ld.add_action(OpaqueFunction(function=launch_setup))
-
+    op = OpaqueFunction(function=launch_setup)
+    ld.add_action(op)
     return ld
