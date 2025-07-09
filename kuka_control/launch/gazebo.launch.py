@@ -1,40 +1,87 @@
 from launch import LaunchDescription
+from launch.actions import DeclareLaunchArgument, RegisterEventHandler, OpaqueFunction
+from launch.event_handlers import OnProcessStart
 from launch.substitutions import LaunchConfiguration
+from launch_ros.actions import Node
+from launch_ros.substitutions import FindPackageShare
+from launch.substitutions import PathJoinSubstitution
+from typing import Dict, Optional, Union
 from lbr_bringup.description import LBRDescriptionMixin
-from lbr_bringup.gazebo import GazeboMixin
 from lbr_bringup.ros2_control import LBRROS2ControlMixin
+from lbr_bringup.gazebo import GazeboMixin
+
+
+def launch_setup(context, *args, **kwargs):
+    ctrl = LaunchConfiguration("ctrl").perform(context)
+
+    # Dynamically set sys_cfg based on ctrl value
+    sys_cfg_default = "config/lbr_system_config_position.yaml"
+    if (
+        ctrl == "cartesian_impedance_controller"
+        or ctrl == "joint_impedance_controller"
+        or ctrl == "gravity_compensation"
+    ):
+        sys_cfg_default = "config/lbr_system_config_torque.yaml"
+
+    print(f"Using system config: {sys_cfg_default}")
+    # Declare sys_cfg argument now that we know the correct default
+    sys_cfg_arg = DeclareLaunchArgument(
+        "sys_cfg",
+        default_value=sys_cfg_default,
+        description="Path to the system config YAML file",
+    )
+
+    robot_description = LBRDescriptionMixin.param_robot_description(
+        mode="gazebo",
+        system_config_path=PathJoinSubstitution(
+            [FindPackageShare("kuka_control"), LaunchConfiguration("sys_cfg")]
+        ),
+        initial_joint_positions_path=PathJoinSubstitution(
+            [FindPackageShare("kuka_control"), "config/initial_joint_positions.yaml"]
+        ),
+    )
+
+    robot_state_publisher = LBRROS2ControlMixin.node_robot_state_publisher(
+        robot_description=robot_description, use_sim_time=False
+    )
+    return [
+        sys_cfg_arg,
+        robot_state_publisher,
+    ]
 
 
 def generate_launch_description() -> LaunchDescription:
     ld = LaunchDescription()
 
-    # launch arguments
+    # Basic args
     ld.add_action(LBRDescriptionMixin.arg_model())
     ld.add_action(LBRDescriptionMixin.arg_robot_name())
-    ld.add_action(LBRROS2ControlMixin.arg_init_jnt_pos())
     ld.add_action(
-        LBRROS2ControlMixin.arg_ctrl()
-    )  # Gazebo loads controller configuration through lbr_description/gazebo/*.xacro from lbr_description/ros2_control/lbr_controllers.yaml
-
-    # robot description
-    robot_description = LBRDescriptionMixin.param_robot_description(mode="gazebo")
-
-    # robot state publisher
-    robot_state_publisher = LBRROS2ControlMixin.node_robot_state_publisher(
-        robot_description=robot_description, use_sim_time=True
+        DeclareLaunchArgument(
+            name="ctrl",
+            default_value="kuka_clik_controller",
+            description="Desired default controller.",
+            choices=[
+                "admittance_controller",
+                "joint_trajectory_controller",
+                "forward_position_controller",
+                "lbr_joint_position_command_controller",
+                "lbr_torque_command_controller",
+                "lbr_wrench_command_controller",
+                "twist_controller",
+                "gravity_compensation",
+                "cartesian_impedance_controller",
+                "joint_impedance_controller",
+                "kuka_clik_controller",
+            ],
+        )
     )
-    ld.add_action(
-        robot_state_publisher
-    )  # Do not condition robot state publisher on joint state broadcaster as Gazebo uses robot state publisher to retrieve robot description
-
-    # Gazebo
     ld.add_action(GazeboMixin.include_gazebo())  # Gazebo has its own controller manager
     ld.add_action(GazeboMixin.node_clock_bridge())
-    ld.add_action(
-        GazeboMixin.node_create()
-    )  # spawns robot in Gazebo through robot_description topic of robot_state_publisher
+    ld.add_action(GazeboMixin.node_create())
+    # Opaque function to evaluate 'ctrl' and configure dependent args/nodes
+    ld.add_action(OpaqueFunction(function=launch_setup))
 
-    # controllers
     joint_state_broadcaster = LBRROS2ControlMixin.node_controller_spawner(
         controller="joint_state_broadcaster"
     )
@@ -44,4 +91,5 @@ def generate_launch_description() -> LaunchDescription:
             controller=LaunchConfiguration("ctrl")
         )
     )
+
     return ld
