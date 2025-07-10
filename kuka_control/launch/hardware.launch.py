@@ -65,9 +65,6 @@ def launch_setup(context, *args, **kwargs):
         system_config_path=PathJoinSubstitution(
             [FindPackageShare("kuka_control"), sys_cfg]
         ),
-        initial_joint_positions_path=PathJoinSubstitution(
-            [FindPackageShare("kuka_control"), "config/initial_joint_positions.yaml"]
-        ),
     )
 
     ros2_control_node = node_ros2_control(
