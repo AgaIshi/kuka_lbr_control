@@ -44,9 +44,26 @@
     kuka_clik_controller:
       type: kuka_clik_controller/KukaClikController
 
+    motion_control_handle:
+      type: cartesian_controller_handles/MotionControlHandle
+
+
+/**/motion_control_handle:
+  ros__parameters:
+    end_effector_link: "probe"
+    robot_base_link: "lbr_link_0"
+    joints:
+      - lbr_A1
+      - lbr_A2
+      - lbr_A3
+      - lbr_A4
+      - lbr_A5
+      - lbr_A6
+      - lbr_A7
+
 /**/force_torque_broadcaster:
   ros__parameters:
-    frame_id: lbr/lbr_link_ee
+    frame_id: lbr/probe
     sensor_name: estimated_ft_sensor
 
 /**/joint_trajectory_controller:
@@ -89,7 +106,7 @@
     # tool.  When you specify a target_wrench, i.e. some additional forces that
     # your robot should apply to its environment, that target_wrench gets
     # applied in this frame.
-    end_effector_link: "lbr_link_ee"
+    end_effector_link: "probe"
 
     # This is usually the link directly before the first actuated joint.  All
     # controllers will build a kinematic chain from this link up to
@@ -101,7 +118,7 @@
     # given in this frame.  It's important that this link is located somewhere
     # between end_effector_link and robot_base_link.  If that's not the case,
     # the controllers won't initialize and will emit an error message.
-    ft_sensor_ref_link: "lbr_link_ee"
+    ft_sensor_ref_link: "probe"
 
     # This is the link that the robot feels compliant about. It does not need
     # to coincide with the end_effector_link, but for many use cases, this
@@ -110,7 +127,7 @@
     # downward pushing forces without generating unwanted offset moments.
     # On the other hand, an application could benefit from yielding a little in
     # the robot's wrist while drawing a line on a surface with a pen.
-    compliance_ref_link: "lbr_link_ee"
+    compliance_ref_link: "probe"
 
     command_interfaces:
       - effort
@@ -140,10 +157,10 @@
 /**/joint_impedance_controller:
   ros__parameters:
     command_current_configuration: true
-    end_effector_link: "lbr_link_ee"
+    end_effector_link: "probe"
     robot_base_link: "lbr_link_0"
-    ft_sensor_ref_link: "lbr_link_ee"
-    compliance_ref_link: "lbr_link_ee"
+    ft_sensor_ref_link: "probe"
+    compliance_ref_link: "probe"
 
     command_interfaces:
       - effort
@@ -173,9 +190,9 @@
     
 /**/gravity_compensation:
   ros__parameters:
-    end_effector_link: "lbr_link_ee"
+    end_effector_link: "probe"
     robot_base_link: "lbr_link_0"
-    ft_sensor_ref_link: "lbr_link_ee"
+    ft_sensor_ref_link: "probe"
     compensate_gravity: false
     compensate_coriolis: false
     command_current_configuration: true # KUKA specific
@@ -195,17 +212,17 @@
 
 /**/kuka_clik_controller:
   ros__parameters:
-    max_linear_velocity: 0.3
-    max_angular_velocity: 0.3
+    max_linear_velocity: 0.03
+    max_angular_velocity: 0.02
     # CLIK parameters
     clik_dt: 0.1 # integration time step
     clik_it_max: 50 # maximum number of iterations for each control step
     clik_eps: 2e-4 # convergence threshold
     clik_filter_alpha: 0.5 # low-pass filter alpha for the output (lower it to avoid motor noise) 
 
-    end_effector_link: "lbr_link_ee"
+    end_effector_link: "probe"
     robot_base_link: "lbr_link_0"
-    compliance_ref_link: "lbr_link_ee"
+    compliance_ref_link: "probe"
     command_interfaces:
       - effort
     state_interfaces:

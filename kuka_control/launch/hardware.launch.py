@@ -43,6 +43,7 @@ def node_ros2_control(
             ("joint_impedance_controller/target_frame", "target_frame"),
             ("joint_impedance_controller/target_wrench", "target_wrench"),
             ("kuka_clik_controller/target_frame", "target_frame"),
+            ("motion_control_handle/target_frame", "target_frame"),
         ],
         **kwargs,
     )
