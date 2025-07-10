@@ -14,6 +14,8 @@ from launch.substitutions import (
     LaunchConfiguration,
     PathJoinSubstitution,
 )
+import xml.etree.ElementTree as ET
+
 
 def my_param_robot_description(
     model: Optional[Union[LaunchConfiguration, str]] = LaunchConfiguration(
@@ -98,6 +100,45 @@ def node_ros2_control(
     )
 
 
+def apply_transparency(robot_description_string):
+    # Parse the robot description XML string
+    root = ET.fromstring(robot_description_string)
+
+    # Iterate over all visual elements
+    for visual in root.findall(".//visual"):
+        parent_link = visual.getparent() if hasattr(visual, "getparent") else None
+        # ElementTree doesn't support getparent(), so we get parent by searching
+        # workaround: find the link that contains this visual
+
+        # Find the parent link by iterating links (since ElementTree has no getparent)
+        parent_link_name = None
+        for link in root.findall(".//link"):
+            if visual in link.findall("visual"):
+                parent_link_name = link.attrib.get("name")
+                break
+
+        if parent_link_name == "probe_visual":
+            # Skip visuals belonging to "probe_visual" link
+            continue
+
+        material = visual.find('material')
+
+        if material is None:
+            # If no material tag, create one
+            material = ET.SubElement(visual, 'material')
+        # Set the material name to "transparent"
+        material.set('name', 'transparent')
+
+        # Remove existing color tags
+        for color in material.findall('color'):
+            material.remove(color)
+        # Add the transparent color (RGBA) element
+        color = ET.SubElement(material, 'color')
+        color.set('rgba', '0.2 0.2 0.2 0.0')  # Adjust as needed
+
+    # Convert back to string
+    return ET.tostring(root, encoding='unicode')
+
 def launch_setup(context, *args, **kwargs):
     ctrl = LaunchConfiguration("ctrl").perform(context)
 
@@ -110,12 +151,32 @@ def launch_setup(context, *args, **kwargs):
     ):
         sys_cfg = "config/lbr_system_config_torque.yaml"
 
-    robot_description = my_param_robot_description(
-        mode="hardware",
-        system_config_path=PathJoinSubstitution(
-            [FindPackageShare("kuka_control"), sys_cfg]
-        ),
+    # Build robot_description Command substitution
+    robot_description_cmd = Command(
+        [
+            FindExecutable(name="xacro"),
+            " ",
+            PathJoinSubstitution(
+                [
+                    FindPackageShare("kuka_control"),
+                    "urdf/iiwa14_ultrasound.xacro",
+                ]
+            ),
+            " robot_name:=",
+            LaunchConfiguration("robot_name"),
+            " mode:=",
+            "hardware",
+            " system_config_path:=",
+            PathJoinSubstitution(
+                [FindPackageShare("kuka_control"), sys_cfg]
+            ),
+        ]
     )
+
+    robot_description_str = robot_description_cmd.perform(context)
+    # Apply transparency to the robot description string
+    robot_description_str = apply_transparency(robot_description_str)
+    robot_description = {"robot_description": robot_description_str}
 
     ros2_control_node = node_ros2_control(
         use_sim_time=False, robot_description=robot_description
@@ -155,7 +216,6 @@ def launch_setup(context, *args, **kwargs):
         ros2_control_node,
         controller_event_handler,
     ]
-
 
 def generate_launch_description() -> LaunchDescription:
     ld = LaunchDescription()
