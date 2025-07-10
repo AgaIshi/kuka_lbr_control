@@ -30,9 +30,7 @@ def node_ros2_control(
                     FindPackageShare(
                         LaunchConfiguration("ctrl_cfg_pkg", default="kuka_control")
                     ),
-                    LaunchConfiguration(
-                        "ctrl_cfg", default="config/controllers.yaml"
-                    ),
+                    LaunchConfiguration("ctrl_cfg", default="config/controllers.yaml"),
                 ]
             ),
             robot_description,
@@ -54,25 +52,18 @@ def launch_setup(context, *args, **kwargs):
     ctrl = LaunchConfiguration("ctrl").perform(context)
 
     # Dynamically set sys_cfg based on ctrl value
-    sys_cfg_default = "config/lbr_system_config_position.yaml"
+    sys_cfg = "config/lbr_system_config_position.yaml"
     if (
         ctrl == "cartesian_impedance_controller"
         or ctrl == "joint_impedance_controller"
         or ctrl == "gravity_compensation"
     ):
-        sys_cfg_default = "config/lbr_system_config_torque.yaml"
-
-    # Declare sys_cfg argument now that we know the correct default
-    sys_cfg_arg = DeclareLaunchArgument(
-        "sys_cfg",
-        default_value=sys_cfg_default,
-        description="Path to the system config YAML file",
-    )
+        sys_cfg = "config/lbr_system_config_torque.yaml"
 
     robot_description = LBRDescriptionMixin.param_robot_description(
         mode="hardware",
         system_config_path=PathJoinSubstitution(
-            [FindPackageShare("kuka_control"), LaunchConfiguration("sys_cfg")]
+            [FindPackageShare("kuka_control"), sys_cfg]
         ),
         initial_joint_positions_path=PathJoinSubstitution(
             [FindPackageShare("kuka_control"), "config/initial_joint_positions.yaml"]
@@ -100,27 +91,22 @@ def launch_setup(context, *args, **kwargs):
         LaunchConfiguration("ctrl")
     )
 
-    # controller_event_handler = RegisterEventHandler(
-    #     OnProcessStart(
-    #         target_action=ros2_control_node,
-    #         on_start=[
-    #             joint_state_broadcaster,
-    #             force_torque_broadcaster,
-    #             lbr_state_broadcaster,
-    #             controller,
-    #         ],
-    #     )
-    # )
+    controller_event_handler = RegisterEventHandler(
+        OnProcessStart(
+            target_action=ros2_control_node,
+            on_start=[
+                joint_state_broadcaster,
+                force_torque_broadcaster,
+                lbr_state_broadcaster,
+                controller,
+            ],
+        )
+    )
 
     return [
-        sys_cfg_arg,
         robot_state_publisher,
         ros2_control_node,
-        # controller_event_handler,
-        joint_state_broadcaster,
-        force_torque_broadcaster,
-        lbr_state_broadcaster,
-        controller,
+        controller_event_handler,
     ]
 
 

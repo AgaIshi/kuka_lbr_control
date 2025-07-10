@@ -1,4 +1,4 @@
-# initial joint positions [degrees]
+# initial joint positions [degrees] for gazebo simulation
 A1 : 0.0
 A2 : 25.0
 A3 : 0.0
