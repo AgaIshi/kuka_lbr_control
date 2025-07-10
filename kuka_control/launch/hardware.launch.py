@@ -79,16 +79,16 @@ def launch_setup(context, *args, **kwargs):
     )
 
     joint_state_broadcaster = LBRROS2ControlMixin.node_controller_spawner(
-        "joint_state_broadcaster"
+        controller="joint_state_broadcaster"
     )
     force_torque_broadcaster = LBRROS2ControlMixin.node_controller_spawner(
-        "force_torque_broadcaster"
+        controller="force_torque_broadcaster"
     )
     lbr_state_broadcaster = LBRROS2ControlMixin.node_controller_spawner(
-        "lbr_state_broadcaster"
+        controller="lbr_state_broadcaster"
     )
     controller = LBRROS2ControlMixin.node_controller_spawner(
-        LaunchConfiguration("ctrl")
+        controller=LaunchConfiguration("ctrl")
     )
 
     controller_event_handler = RegisterEventHandler(
