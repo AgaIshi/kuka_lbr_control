@@ -19,7 +19,7 @@ find_package(ament_cmake REQUIRED)
 find_package(ament_cmake_python REQUIRED)
 
 
-INSTALL(DIRECTORY launch config
+INSTALL(DIRECTORY launch config meshes urdf
   DESTINATION share/${PROJECT_NAME}
 )
 ament_package()

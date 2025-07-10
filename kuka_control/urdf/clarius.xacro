@@ -1,0 +1,45 @@
+  
+<robot name="clarius" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- US holder model -->
+  <link
+    name="clarius_holder">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://kuka_control/meshes/clarius/clarius_holder.stl"
+          scale="0.001 0.001 0.001" />
+      </geometry>
+      <material name="transparent" />
+    </visual>
+  </link>
+  <!-- US probe model -->
+  <joint name="clarius_joint" type="fixed">
+    <parent link="clarius_holder" />
+    <child link="probe" />
+    <origin xyz="0.0 -0.0135 0.145" rpy="0.610865 0.0 0.0" />
+  </joint>
+  <joint name="clarius_joint_visual" type="fixed">
+    <parent link="clarius_holder" />
+    <child link="probe_visual" />
+    <origin xyz="0.0 0.00 0.0" rpy="0 0.0 0.0" />
+  </joint>
+
+  <link
+    name="probe_visual">
+    <visual>
+      <geometry>
+        <mesh filename="package://kuka_control/meshes/clarius/clarius.stl"
+          scale="0.001 0.001 0.001" />
+      </geometry>
+      <material name="grey">
+        <color rgba="1.0 1.0 1.0 1.0" />
+      </material>
+    </visual>
+  </link>
+
+  <link
+    name="probe">
+  </link>
+</robot>

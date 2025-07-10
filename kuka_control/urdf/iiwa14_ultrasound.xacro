@@ -1,0 +1,18 @@
+<robot name="iiwa14_ultrasound" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <material name="transparent">
+    <color rgba="0.2 0.2 0.2 0.0" />
+  </material>
+  <!-- include the lbr iiwa macro -->
+  <xacro:include filename="$(find lbr_description)/urdf/iiwa14/iiwa14.xacro" />
+  <!-- include the clarius ultrasound probe -->
+  <xacro:include filename="$(find kuka_control)/urdf/clarius.xacro" />
+
+  <!-- iiwa to clarius joint -->
+  <joint name="probe_joint" type="fixed">
+    <parent link="$(arg robot_name)_link_ee" />
+    <child link="clarius_holder" />
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 ${-pi/2}" />
+  </joint>
+
+</robot>
