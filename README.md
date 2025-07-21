@@ -1,6 +1,6 @@
 # KUKA LBR Control  
 
-A repository for controlling the KUKA lbr or med with cartesian impedance control using ROS2.
+A repository for controlling the KUKA lbr iiwa or med with cartesian impedance control using ROS2.
 
 <table>
     <tr>
