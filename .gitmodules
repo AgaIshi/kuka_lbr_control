@@ -13,3 +13,6 @@
 	path = lbr-stack/lbr_fri_ros2_stack
 	url = git@github.com:lbr-stack/lbr_fri_ros2_stack.git
 	branch = humble
+[submodule "controller_evaluation"]
+	path = controller_evaluation
+	url = https://github.com/idra-lab/controller_evaluation.git
