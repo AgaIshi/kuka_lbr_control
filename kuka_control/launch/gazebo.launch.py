@@ -79,6 +79,7 @@ def generate_launch_description() -> LaunchDescription:
     ld.add_action(GazeboMixin.include_gazebo())  # Gazebo has its own controller manager
     ld.add_action(GazeboMixin.node_clock_bridge())
     ld.add_action(GazeboMixin.node_create())
+    ld.add_action(GazeboMixin.node_static_box())
     # Opaque function to evaluate 'ctrl' and configure dependent args/nodes
     ld.add_action(OpaqueFunction(function=launch_setup))
 
@@ -93,3 +94,4 @@ def generate_launch_description() -> LaunchDescription:
     )
 
     return ld
+
