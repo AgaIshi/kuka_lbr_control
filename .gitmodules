@@ -16,3 +16,5 @@
 [submodule "controller_evaluation"]
 	path = controller_evaluation
 	url = https://github.com/idra-lab/controller_evaluation.git
+[submodule "lbr-stack/lbr_fri_ros2_stack"]
+	url = git@github.com:AgaIshi/lbr.git
